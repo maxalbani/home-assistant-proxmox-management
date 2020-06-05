@@ -21,8 +21,6 @@ This components are required for installation:
  
  ## Installation
 
-**Before proceeding with the installation, make sure you have installed and configured all the required components!**
-
 The logic of node-red flows is based on the presence of **binary sensors** created by the **Proxmox VE integration**.
 
 For example, with this configuration you will have **four** binary sensors:
@@ -44,4 +42,7 @@ proxmoxve:
           - 101
 ```
 
+![binary sensors image](images/binary_sensors.png)
+
+**Before proceeding with the installation, make sure you've created your Proxmox Binary Sensors and installed/configured all the required components!**
 
