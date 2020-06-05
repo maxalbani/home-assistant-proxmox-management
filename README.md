@@ -68,3 +68,55 @@ Ok, we can start the installation.
    - Open "**event Sensor Change**" node and replace **"pve" string** with your Proxmox Hostname.
  - Deploy Flows.
  - Restart Home Assistant.
+ 
+ **That's all.**
+
+## Usage
+
+This Proxmox Package installs three services:
+
+### script.proxmox_config
+
+Connects to your Proxmox Server and gets **some info** from the specified host.
+
+**Service Data**
+ - host: Proxmox VM or LXC container name
+
+**Output**
+
+This service sets 6 **var** entity with host info that you can read:
+
+ - var.proxmox_status
+ - var.proxmox_name
+ - var.proxmox_id
+ - var.proxmox_type
+ - var.proxmox_memory
+ - var.proxmox_cores
+
+**Example**
+
+```yaml
+- service: script.proxmox_config
+  data:
+    host: 'hassio'
+```
+
+### script.proxmox_listsnapshot
+
+Connects to your Proxmox Server and gets **snapshots list** from the specified host.
+
+**Service Data**
+ - host: Proxmox VM or LXC container name
+
+**Output**
+
+This service sets the **var.proxmox_snapshots** entity with the list of snapshots of the specified host.
+
+**Example**
+
+```yaml
+- service: script.proxmox_listsnapshot
+  data:
+    host: 'hassio'
+```
+
