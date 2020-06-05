@@ -80,7 +80,8 @@ This Proxmox Package installs three services:
 Connects to your Proxmox Server and gets **some info** from the specified host.
 
 **Service Data**
- - host: Proxmox VM or LXC container name
+
+**host:** Proxmox VM or LXC container name
 
 **Output**
 
@@ -106,7 +107,8 @@ This service sets 6 **var** entity with host info that you can read:
 Connects to your Proxmox Server and gets **snapshots list** from the specified host.
 
 **Service Data**
- - host: Proxmox VM or LXC container name
+
+**host:** Proxmox VM or LXC container name
 
 **Output**
 
