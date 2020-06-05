@@ -133,20 +133,39 @@ Connects to your Proxmox Server and exec command on the specified host.
 
 The **command** parameter can have these values:
 
-| value | desc  |
+| value | description  |
 |--|--|
-| `shutdown` |  |
+| `shutdown` | Shutdown virtual machine or lxc container |
+| `start` | Start virtual machine or lxc container |
+| `reboot` | Reboot virtual machine or lxc container |
+| `snapshot` | Create snapshot with name defined in **input_text.proxmox_snapshot** 
 
 
 **Output**
 
-This service sets the **var.proxmox_snapshots** entity with the list of snapshots of the specified host.
+This service executes the specified command and sets **var.proxmox_log** entity.
 
 **Example**
 
+Shutdown *hassio-test* virtual machine.
+
 ```yaml
-- service: script.proxmox_listsnapshot
+- service: script.proxmox_command
   data:
-    host: 'hassio'
+    command: 'shutdown'
+    host: 'hassio-test'
+```
+
+Create snapshot *backup* of *hassio-test* virtual machine.
+
+```yaml
+- service: input_text.set_value
+  data:
+    entity_id: input_text.proxmox_snapshot
+	value: 'backup'
+- service: script.proxmox_command
+  data:
+    command: 'snapshot'
+    host: 'hassio-test'
 ```
 
