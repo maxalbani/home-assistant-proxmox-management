@@ -1,5 +1,5 @@
 # home-assistant-proxmox-management
-A custom Proxmox console on Home Assistant to manage VM &amp; LXC, made with Node-Red.
+A custom **Proxmox Console** on Home Assistant to manage VM &amp; LXC, made with **Node-Red**.
 
 ![console image](images/console.png)
 
