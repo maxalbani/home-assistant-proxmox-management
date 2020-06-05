@@ -491,5 +491,11 @@ cards:
     type: conditional
 type: vertical-stack
 ```
-
+ ## Credits
+ 
+   - [Custom component Variables](https://github.com/snarky-snark/home-assistant-variables)
+   - [Button Card](https://github.com/custom-cards/button-card)
+   - [Text Input Row](https://github.com/gadgetchnnel/lovelace-text-input-row)
+   - [Card mod](https://github.com/thomasloven/lovelace-card-mod)
+   - [iOs Dark Mode Theme](https://github.com/basnijholt/lovelace-ios-dark-mode-theme)
  
