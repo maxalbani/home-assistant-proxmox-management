@@ -181,5 +181,315 @@ To use this lovelace configuration, you need the following custom components:
 ![console image](images/console.png)
 
 In this example UI was used [iOs Dark Mode Theme](https://github.com/basnijholt/lovelace-ios-dark-mode-theme) with alternative background [homekit-bg-4.jpeg](https://github.com/basnijholt/lovelace-ios-dark-mode-theme/blob/master/backgrounds/homekit-bg-4.jpeg).
- 
+
+### Configuration
+
+ - Copy this code at the top of the your **Lovelace configuration**. They are the **Button Card templates**.
+```yaml
+button_card_templates:
+  button_icon:
+    styles:
+      card:
+        - height: 80px
+      name:
+        - margin-top: 5px
+  header:
+    styles:
+      card:
+        - padding: 15px 15px
+        - background-color: 'rgba(0, 0, 0, 0.0)'
+        - box-shadow: none
+      name:
+        - text-transform: uppercase
+        - font-size: 120%
+        - color: var(--text-primary-color)
+        - justify-self: center
+        - font-weight: bold
+    tap_action:
+      action: none
+```
+ - Create a new lovelace tab and add these 3 **vertical stacks**.
+
+Vertical Stack #1
+
+**On this card you need to configure your Proxmox Binary Sensors.**
+```yaml
+cards:
+  - name: Proxmox VM & LXC
+    template: header
+    type: 'custom:button-card'
+  - entities:
+      - entity: binary_sensor.pve_hassio_running
+        name: Hassio
+        state_color: true
+      - entity: binary_sensor.pve_hassio_test_running
+        name: Hassio TEST
+        state_color: true
+      - entity: binary_sensor.pve_lamp_running
+        name: Lamp (lxc)
+        state_color: true
+      - entity: binary_sensor.pve_omv_running
+        name: OMV
+        state_color: true
+    show_header_toggle: false
+    type: entities
+  - entities:
+      - entity: input_boolean.proxmox_notifiche
+        name: Attiva notifiche persistenti per errori
+        state_color: true
+    show_header_toggle: false
+    type: entities
+  - name: debug
+    tap_action:
+      action: call-service
+      service: script.proxmox_command
+      service_data:
+        command: pippo
+        host: hassio-test
+    type: 'custom:button-card'
+type: vertical-stack
+```
+Vertical Stack #2
+
+```yaml
+cards:
+  - name: Info
+    template: header
+    type: 'custom:button-card'
+  - entities:
+      - entity: input_select.proxmox_vm
+    show_header_toggle: false
+    type: entities
+  - entities:
+      - entity: var.proxmox_name
+        name: Name
+        style: |
+          .text-content {
+            font-size: 140%;
+            font-weight: bold;
+          }
+      - entity: var.proxmox_status
+        name: Status
+        style: |
+          .text-content {
+            font-size: 120%;
+            font-weight: bold;
+            color:
+              {% if is_state('var.proxmox_status', 'Running') %}
+                var(--state-icon-active-color)
+              {% else %}
+                red
+              {% endif %}
+              ;
+          }
+      - entity: var.proxmox_id
+        name: ID
+        style: |
+          .text-content {
+            font-size: 120%;
+          }
+      - entity: var.proxmox_type
+        name: Type
+        style: |
+          .text-content {
+            font-size: 120%;
+          }
+      - entity: var.proxmox_cores
+        name: Cores
+        style: |
+          .text-content {
+            font-size: 120%;
+          }
+      - entity: var.proxmox_memory
+        name: Memory (MB)
+        style: |
+          .text-content {
+            font-size: 120%;
+          }
+    show_header_toggle: false
+    type: entities
+  - name: Lista Snapshots
+    template: header
+    type: 'custom:button-card'
+  - entity: var.proxmox_snapshots
+    show_icon: false
+    show_name: false
+    show_state: true
+    styles:
+      card:
+        - padding: 30px 15px
+        - min-height: 100px
+      state:
+        - overflow: visible
+        - white-space: normal
+        - justify-self: left
+        - text-align: left
+    tap_action:
+      action: none
+    type: 'custom:button-card'
+type: vertical-stack
+```
+
+Vertical Stack #3
+
+```yaml
+cards:
+  - name: comandi
+    template: header
+    type: 'custom:button-card'
+  - card:
+      cards:
+        - cards:
+            - confirmation:
+                text: >-
+                  [[[ return `Sei sicuro di voler eseguire uno SHUTDOWN di
+                  ${states["input_select.proxmox_vm"].state}?` ]]]
+              icon: 'mdi:stop'
+              lock:
+                enabled: >-
+                  [[[ return states["var.proxmox_status"].state === "Stopped";
+                  ]]]
+                exemptions: []
+              name: Stop
+              tap_action:
+                action: call-service
+                service: script.proxmox_gui_stop
+              template: button_icon
+              type: 'custom:button-card'
+            - confirmation:
+                text: >-
+                  [[[ return `Sei sicuro di voler eseguire uno START di
+                  ${states["input_select.proxmox_vm"].state}?` ]]]
+              icon: 'mdi:play'
+              lock:
+                enabled: >-
+                  [[[ return states["var.proxmox_status"].state === "Running";
+                  ]]]
+                exemptions: []
+              name: Start
+              tap_action:
+                action: call-service
+                service: script.proxmox_gui_start
+              template: button_icon
+              type: 'custom:button-card'
+            - confirmation:
+                text: >-
+                  [[[ return `Sei sicuro di voler eseguire un REBOOT di
+                  ${states["input_select.proxmox_vm"].state}?` ]]]
+              icon: 'mdi:replay'
+              lock:
+                enabled: >-
+                  [[[ return states["var.proxmox_status"].state === "Stopped";
+                  ]]]
+                exemptions: []
+              name: Reboot
+              tap_action:
+                action: call-service
+                service: script.proxmox_gui_reboot
+              template: button_icon
+              type: 'custom:button-card'
+          type: horizontal-stack
+        - cards:
+            - entities:
+                - entity: input_text.proxmox_snapshot
+                  type: 'custom:text-input-row'
+              show_header_toggle: false
+              type: entities
+            - confirmation:
+                text: >-
+                  [[[ return `Sei sicuro di voler eseguire uno SNAPSHOT di
+                  ${states["input_select.proxmox_vm"].state}?` ]]]
+              icon: 'mdi:backup-restore'
+              show_name: false
+              size: 60%
+              styles:
+                card:
+                  - width: 100px
+                  - height: 100%
+              tap_action:
+                action: call-service
+                service: script.proxmox_gui_snapshot
+              type: 'custom:button-card'
+          type: horizontal-stack
+        - name: Log
+          template: header
+          type: 'custom:button-card'
+        - cards:
+            - entity: var.proxmox_last_command
+              name: |
+                [[[
+                  return states['var.proxmox_log'].state;
+                ]]]
+              show_icon: false
+              show_name: true
+              show_state: false
+              state:
+                - styles:
+                    name:
+                      - color: var(--state-icon-active-color)
+                  value: info
+                - styles:
+                    name:
+                      - color: red
+                  value: error
+                - styles:
+                    name:
+                      - color: green
+                  value: success
+                - styles:
+                    name:
+                      - color: yellow
+                  value: warning
+              styles:
+                card:
+                  - padding: 30px 15px
+                  - min-height: 100px
+                name:
+                  - overflow: visible
+                  - white-space: normal
+                  - justify-self: left
+                  - text-align: left
+                  - font-weight: bold
+              tap_action:
+                action: none
+              type: 'custom:button-card'
+            - icon: 'mdi:delete'
+              show_name: false
+              size: 50%
+              styles:
+                card:
+                  - width: 60px
+                  - height: 100%
+                  - background: none
+                  - box-shadow: none
+              tap_action:
+                action: call-service
+                service: var.set
+                service_data:
+                  entity_id: var.proxmox_log
+                  value: ''
+              type: 'custom:button-card'
+          type: horizontal-stack
+      type: vertical-stack
+    conditions:
+      - entity: input_select.proxmox_vm
+        state_not: Seleziona
+    type: conditional
+  - card:
+      name: <-- Seleziona un host da gestire
+      styles:
+        card:
+          - height: 94px
+        name:
+          - font-size: 120%
+      tap_action:
+        action: none
+      type: 'custom:button-card'
+    conditions:
+      - entity: input_select.proxmox_vm
+        state: Seleziona
+    type: conditional
+type: vertical-stack
+```
+
  
