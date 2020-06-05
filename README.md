@@ -81,7 +81,7 @@ Connects to your Proxmox Server and gets **some info** from the specified host.
 
 **Service Data**
 
-**host:** Proxmox VM or LXC container name
+  - **host:** Proxmox VM or LXC container name
 
 **Output**
 
@@ -108,7 +108,7 @@ Connects to your Proxmox Server and gets **snapshots list** from the specified h
 
 **Service Data**
 
-**host:** Proxmox VM or LXC container name
+  - **host:** Proxmox VM or LXC container name
 
 **Output**
 
