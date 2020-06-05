@@ -51,6 +51,7 @@ Ok, we can start the installation.
  - Copy **proxmox.yaml** file in your packages directory.
  - Go to Node-Red web interface.
  - If not present, install the following Node-Red nodes from **Hamburger Icon** -> **Manage palette** -> **Install**
+ 
    - *node-red-contrib-string*
    - *node-red-contrib-bigssh*
  - Copy this string and import flow from **Hamburger Icon** -> **Import** 
@@ -62,6 +63,7 @@ Ok, we can start the installation.
  - Configure **Hassio Broker MQTT** with your Broker Ip Address and credentials.
  - Deploy Flows.
  - If your Proxmox Host does not have the default name (**pve**), you need to edit two nodes:
+ 
    - Open "**get Proxmox Sensors**" node and replace **"pve" string** with your Proxmox Hostname.
    - Open "**event Sensor Change**" node and replace **"pve" string** with your Proxmox Hostname.
  - Deploy Flows.
