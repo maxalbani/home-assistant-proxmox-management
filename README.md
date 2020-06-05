@@ -135,7 +135,7 @@ The **command** parameter can have these values:
 
 | value | desc  |
 |--|--|
-| shutdown |  |
+| `shutdown` |  |
 
 
 **Output**
