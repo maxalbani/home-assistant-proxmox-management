@@ -122,3 +122,31 @@ This service sets the **var.proxmox_snapshots** entity with the list of snapshot
     host: 'hassio'
 ```
 
+### script.proxmox_command
+
+Connects to your Proxmox Server and exec command on the specified host.
+
+**Service Data**
+
+  - **host:** Proxmox VM or LXC container name
+  - **command:** Command to execute on Proxmox
+
+The **command** parameter can have these values:
+
+| value | desc  |
+|--|--|
+| shutdown |  |
+
+
+**Output**
+
+This service sets the **var.proxmox_snapshots** entity with the list of snapshots of the specified host.
+
+**Example**
+
+```yaml
+- service: script.proxmox_listsnapshot
+  data:
+    host: 'hassio'
+```
+
