@@ -162,7 +162,7 @@ Create snapshot *backup* of *hassio-test* virtual machine.
 - service: input_text.set_value
   data:
     entity_id: input_text.proxmox_snapshot
-	value: 'backup'
+    value: 'backup'
 - service: script.proxmox_command
   data:
     command: 'snapshot'
