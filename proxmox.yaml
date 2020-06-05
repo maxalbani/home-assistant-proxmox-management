@@ -1,0 +1,127 @@
+var:
+  proxmox_id:
+    initial_value: ''
+    icon: mdi:identifier
+  proxmox_name:
+    initial_value: ''
+    icon: mdi:alphabetical
+  proxmox_status:
+    initial_value: ''
+    icon: mdi:toggle-switch
+  proxmox_type:
+    initial_value: ''
+    icon: mdi:server
+  proxmox_cores:
+    initial_value: ''
+    icon: mdi:server-network
+  proxmox_memory:
+    initial_value: ''
+    icon: mdi:memory
+  proxmox_log:
+    initial_value: ''
+    icon: mdi:log
+  proxmox_snapshots:
+    initial_value: ''
+    icon: mdi:backup-restore
+  proxmox_last_command:
+    initial_value: ''
+    
+    
+input_text:
+  proxmox_snapshot:
+    name: Snapshot name
+    initial: ''
+    
+input_boolean:
+  proxmox_notifiche:
+    name: Attiva notifiche persistenti
+    icon: mdi:bell
+    
+input_select:
+  proxmox_vm:
+    name: 'Lista VM & LXC:'
+    options:
+      - Seleziona
+    initial: Seleziona
+    icon: mdi:server 
+    
+script:
+  proxmox_gui_stop:
+    alias: "Stop VM"
+    sequence:
+      - condition: template
+        value_template: '{{ states.input_select.proxmox_vm.state != "Seleziona" }}'
+      - service: script.proxmox_command
+        data_template:
+          command: 'shutdown'
+          host: '{{ states.input_select.proxmox_vm.state }}'
+
+  proxmox_gui_start:
+    alias: "Start VM"
+    sequence:
+      - condition: template
+        value_template: '{{ states.input_select.proxmox_vm.state != "Seleziona" }}'
+      - service: script.proxmox_command
+        data_template:
+          command: 'start'
+          host: '{{ states.input_select.proxmox_vm.state }}'
+          
+  proxmox_gui_reboot:
+    alias: "Reboot VM"
+    sequence:
+      - condition: template
+        value_template: '{{ states.input_select.proxmox_vm.state != "Seleziona" }}'
+      - service: script.proxmox_command
+        data_template:
+          command: 'reboot'
+          host: '{{ states.input_select.proxmox_vm.state }}'
+
+  proxmox_gui_snapshot:
+    alias: "Snapshot VM"
+    sequence:
+      - condition: template
+        value_template: '{{ states.input_select.proxmox_vm.state != "Seleziona" }}'
+      - service: script.proxmox_command
+        data_template:
+          command: 'snapshot'
+          host: '{{ states.input_select.proxmox_vm.state }}'
+                    
+  proxmox_config:
+    alias: "Get Proxmox Config"
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: proxmox/config
+          payload: "{{ host }}"
+          
+  proxmox_listsnapshot:
+    alias: "Get Snapshots List"
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: proxmox/listsnapshot
+          payload: "{{ host }}"
+          
+  proxmox_command:
+    alias: "Exec Proxmox Command"
+    sequence:
+      - service: mqtt.publish
+        data_template:
+          topic: proxmox/command
+          payload: >-
+            {
+              "command": "{{ command }}",
+              "host": "{{ host }}"
+            }
+          
+        
+automation:
+  - alias: Load input Host
+    trigger:
+    - platform: homeassistant
+      event: start
+    action:
+    - delay: '00:00:05'
+    - service: mqtt.publish
+      data:
+        topic: hassio/start
