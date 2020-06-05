@@ -170,4 +170,16 @@ Create snapshot *backup* of *hassio-test* virtual machine.
     command: 'snapshot'
     host: 'hassio-test'
 ```
+## Lovelace Console
 
+To use this lovelace configuration, you need the following custom components:
+
+ - [Button Card](https://github.com/custom-cards/button-card)
+ - [Text Input Row](https://github.com/gadgetchnnel/lovelace-text-input-row)
+ - [Card mod](https://github.com/thomasloven/lovelace-card-mod)
+
+![console image](images/console.png)
+
+In this example UI was used [iOs Dark Mode Theme](https://github.com/basnijholt/lovelace-ios-dark-mode-theme) with alternative background [homekit-bg-4.jpeg](https://github.com/basnijholt/lovelace-ios-dark-mode-theme/blob/master/backgrounds/homekit-bg-4.jpeg).
+ 
+ 
