@@ -21,4 +21,26 @@ This components are required for installation:
  
  ## Installation
 
+**Before proceeding with the installation, make sure you have installed and configured all the required components!**
+
+The logic of node-red flows is based on the presence of **binary sensors** created by the **Proxmox VE integration**.
+For example, with this configuration you will have **four** binary sensors:
+
+```yaml
+proxmoxve:
+  - host: 192.168.x.x
+    username: hass
+    password: fake
+    verify_ssl: false
+    realm: pve
+    nodes:
+      - node: pve
+        vms:
+          - 100
+          - 102
+          - 103
+        containers:
+          - 101
+```
+
 
