@@ -1,4 +1,8 @@
 # home-assistant-proxmox-management
+
+## I'm sorry but the Home Assistant proxmox integration no longer provides the necessary attributes. Without these attributes this project is to be considered obsolete.
+
+
 A custom **Proxmox Console** on Home Assistant to manage VM &amp; LXC, made with **Node-Red**.
 
 ![console image](images/console.png)
